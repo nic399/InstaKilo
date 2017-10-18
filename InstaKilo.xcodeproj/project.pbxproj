@@ -16,6 +16,7 @@
 		013E51461F97E8C600BC08BD /* MyCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 013E51451F97E8C600BC08BD /* MyCollectionReusableView.m */; };
 		013E51491F97E9EA00BC08BD /* MyCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 013E51481F97E9EA00BC08BD /* MyCollectionViewController.m */; };
 		013E514F1F97F67200BC08BD /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 013E514E1F97F67200BC08BD /* DetailViewController.m */; };
+		013E51521F97FD1A00BC08BD /* MyImageClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 013E51511F97FD1A00BC08BD /* MyImageClass.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +36,8 @@
 		013E51481F97E9EA00BC08BD /* MyCollectionViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyCollectionViewController.m; sourceTree = "<group>"; };
 		013E514D1F97F67200BC08BD /* DetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailViewController.h; sourceTree = "<group>"; };
 		013E514E1F97F67200BC08BD /* DetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailViewController.m; sourceTree = "<group>"; };
+		013E51501F97FD1A00BC08BD /* MyImageClass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyImageClass.h; sourceTree = "<group>"; };
+		013E51511F97FD1A00BC08BD /* MyImageClass.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyImageClass.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +80,8 @@
 				013E51421F97E87C00BC08BD /* MyCollectionViewCell.m */,
 				013E51441F97E8C600BC08BD /* MyCollectionReusableView.h */,
 				013E51451F97E8C600BC08BD /* MyCollectionReusableView.m */,
+				013E51501F97FD1A00BC08BD /* MyImageClass.h */,
+				013E51511F97FD1A00BC08BD /* MyImageClass.m */,
 				013E51311F97C08F00BC08BD /* Main.storyboard */,
 				013E51341F97C08F00BC08BD /* Assets.xcassets */,
 				013E51361F97C08F00BC08BD /* LaunchScreen.storyboard */,
@@ -158,6 +163,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				013E513B1F97C08F00BC08BD /* main.m in Sources */,
+				013E51521F97FD1A00BC08BD /* MyImageClass.m in Sources */,
 				013E51491F97E9EA00BC08BD /* MyCollectionViewController.m in Sources */,
 				013E51431F97E87C00BC08BD /* MyCollectionViewCell.m in Sources */,
 				013E51461F97E8C600BC08BD /* MyCollectionReusableView.m in Sources */,

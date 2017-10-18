@@ -9,16 +9,29 @@
 #import "MyCollectionViewController.h"
 #import "MyCollectionReusableView.h"
 #import "MyCollectionViewCell.h"
+#import "DetailViewController.h"
+#import "MyImageClass.h"
 
 @interface MyCollectionViewController ()
 
-@property (nonatomic, strong) NSMutableArray *imagesNameArr;
+@property (nonatomic, strong) NSMutableArray<NSString *> *imagesNameArr;
+@property (nonatomic, strong) NSMutableArray<MyImageClass *> *myImageObjectsArr;
+@property (nonatomic, strong) NSMutableArray<NSString *> *locationsArr;
+@property (nonatomic, strong) NSMutableArray<NSString *> *subjectsArr;
+@property (nonatomic, strong) NSMutableArray<NSMutableArray *> *dataSourceArr;
+@property (nonatomic, strong) UISegmentedControl *sortViewBy;
 
 @end
+
+typedef enum : NSUInteger {
+    Subject,
+    Location
+} sortParameterEnum;
 
 @implementation MyCollectionViewController
 
 static NSString * const reuseIdentifier = @"Cell";
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -32,35 +45,159 @@ static NSString * const reuseIdentifier = @"Cell";
     // Do any additional setup after loading the view.
     
     self.imagesNameArr = [NSMutableArray new];
+    self.myImageObjectsArr = [NSMutableArray new];
+    self.locationsArr = [NSMutableArray new];
+    self.subjectsArr = [NSMutableArray new];
+    self.dataSourceArr = [NSMutableArray new];
+    
+    UISegmentedControl *sortViewBy = [[UISegmentedControl alloc] initWithItems:@[@"Subject", @"Location"]];
+    [sortViewBy addTarget:self action:@selector(sortParameterChanged:) forControlEvents:UIControlEventValueChanged];
+    sortViewBy.selectedSegmentIndex = 0;
+    self.navigationItem.titleView = sortViewBy;
+    self.sortViewBy = sortViewBy;
     
     for (int i = 0; i < 42; i++) {
         [self.imagesNameArr addObject:[NSString stringWithFormat:@"picture%d", i]];
+        MyImageClass *myImage = [MyImageClass new];
+        myImage.name = self.imagesNameArr[i];
+        myImage.location = [self assignLocation:i%5];
+        [myImage.subjectsArr addObject:[self assignSubject:i%3]];
+        [self.myImageObjectsArr addObject:myImage];
     }
     
     
+    
+    for (int i = 0; i < [self.myImageObjectsArr count]; i++) {
+        
+        // Populate locationsArr with one element for each unique location tag in the array of myImageObjectsArr
+        BOOL locationExists = false;
+        for (int j = 0; j < [self.locationsArr count]; j++) {
+            if ([self.locationsArr[j] isEqualToString:self.myImageObjectsArr[i].location]) {
+                locationExists = true;
+            }
+        }
+        if (!locationExists) {
+            [self.locationsArr addObject:self.myImageObjectsArr[i].location];
+        }
+        
+        // Populate subjectsArr with one element for each unique subject tag in the array of myImageObjectsArr
+        BOOL subjectExists = false;
+        for (int j = 0; j < [self.subjectsArr count]; j++) {
+            if ([self.subjectsArr[j] isEqualToString:self.myImageObjectsArr[i].subjectsArr[0]]) {
+                subjectExists = true;
+            }
+        }
+        if (!subjectExists) {
+            [self.subjectsArr addObject:self.myImageObjectsArr[i].subjectsArr[0]];
+        }
+    }
+    
+    
+    
+    
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+-(void)sortParameterChanged:(UISegmentedControl *)sender {
+    NSLog(@"Currently selected segment index is %ld", (long)sender.selectedSegmentIndex);
+    [self sortImagesBy:sender.selectedSegmentIndex];
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+-(void)sortImagesBy:(sortParameterEnum)sortParameter {
+    NSLog(@"Sorting by %ld", sortParameter);
+    
+    [self.dataSourceArr removeAllObjects];
+    NSLog(@"dataSourceArr emptied");
+    switch (sortParameter) {
+        case 0: // sort by 'Subject'
+            // create new arrays in the dataSourceArr (one for each subject)
+            for (int i = 0; i < [self.subjectsArr count]; i++) {
+                self.dataSourceArr[i] = [NSMutableArray new];
+            }
+            // add each image to the dataSourceArr
+            for (int i = 0; i < [self.myImageObjectsArr count]; i++) {
+                for (int j = 0; j < [self.subjectsArr count]; j++) {
+                    if ([self.subjectsArr[j] isEqualToString:self.myImageObjectsArr[i].subjectsArr[0]]) {
+                        [self.dataSourceArr[j] addObject:self.myImageObjectsArr[i]];
+                        break;
+                    }
+                }
+            }
+            
+            break;
+            
+        case 1: // sort by 'Location'
+            // create new arrays in the dataSourceArr (one for each subject)
+            for (int i = 0; i < [self.locationsArr count]; i++) {
+                self.dataSourceArr[i] = [NSMutableArray new];
+            }
+            // add each image to the dataSourceArr
+            for (int i = 0; i < [self.myImageObjectsArr count]; i++) {
+                for (int j = 0; j < [self.locationsArr count]; j++) {
+                    if ([self.locationsArr[j] isEqualToString:self.myImageObjectsArr[i].location]) {
+                        [self.dataSourceArr[j] addObject:self.myImageObjectsArr[i]];
+                        break;
+                    }
+                }
+            }
+            
+            break;
+            
+        default:
+            NSLog(@"Unknown sorting parameter selected");
+            break;
+    }
 }
-*/
+
+-(NSString *)assignLocation:(int)input {
+    switch (input) {
+        case 0:
+            return @"Vancouver";
+        case 1:
+            return @"New York";
+        case 2:
+            return @"London";
+        case 3:
+            return @"Hong Kong";
+        case 4:
+            return @"Jerusalem";
+        default:
+            return @"No Location";
+    }
+}
+
+-(NSString *)assignSubject:(int)input {
+    switch (input) {
+        case 0:
+            return @"Sadness";
+        case 1:
+            return @"Demotivation";
+        case 2:
+            return @"Despair";
+        default:
+            return @"No Subject";
+    }
+}
 
 #pragma mark <UICollectionViewDataSource>
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return 1;
+    NSInteger numOfSections = 0;
+    switch (self.sortViewBy.selectedSegmentIndex) {
+        case 0:
+            numOfSections = [self.subjectsArr count];
+            break;
+            
+        case 1:
+            numOfSections = [self.locationsArr count];
+            break;
+            
+        default:
+            NSLog(@"Unable to identify proper number of sections");
+            numOfSections = 1;
+            break;
+    }
+    return numOfSections;
 }
-
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     return [self.imagesNameArr count];
@@ -71,46 +208,50 @@ static NSString * const reuseIdentifier = @"Cell";
     
     // Configure the cell
     cell.imageView.image = [UIImage imageNamed:self.imagesNameArr[indexPath.row]];
+    cell.imageName.text = self.imagesNameArr[indexPath.row];
     
     return cell;
 }
 
 #pragma mark <UICollectionViewDelegate>
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    [self performSegueWithIdentifier:@"showDetail" sender:self];
+    [self performSegueWithIdentifier:@"showDetail" sender:[self.collectionView cellForItemAtIndexPath:indexPath]];
 }
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    
+    NSLog(@"preparing for sugue");
+    MyCollectionViewCell *myCell = sender;
+    DetailViewController *destinationController = segue.destinationViewController;
+    destinationController.detailImage = myCell.imageView.image;
 }
 
 /*
-// Uncomment this method to specify if the specified item should be highlighted during tracking
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
-	return YES;
-}
-*/
+ // Uncomment this method to specify if the specified item should be highlighted during tracking
+ - (BOOL)collectionView:(UICollectionView *)collectionView shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
+ return YES;
+ }
+ */
 
 /*
-// Uncomment this method to specify if the specified item should be selected
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    return YES;
-}
-*/
+ // Uncomment this method to specify if the specified item should be selected
+ - (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+ return YES;
+ }
+ */
 
 /*
-// Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath {
-	return NO;
-}
-
-- (BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
-	return NO;
-}
-
-- (void)collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
-	
-}
-*/
+ // Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
+ - (BOOL)collectionView:(UICollectionView *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath {
+ return NO;
+ }
+ 
+ - (BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
+ return NO;
+ }
+ 
+ - (void)collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
+ 
+ }
+ */
 
 @end

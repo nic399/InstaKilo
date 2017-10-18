@@ -28,14 +28,14 @@
     [detailImageView.topAnchor constraintEqualToAnchor:self.scrollView.topAnchor].active = true;
     [detailImageView.bottomAnchor constraintEqualToAnchor:self.scrollView.bottomAnchor].active = true;
 
-    self.scrollView.minimumZoomScale = 0.15;
+    self.scrollView.minimumZoomScale = 0.25;
     self.scrollView.maximumZoomScale = 4.0;
-    self.scrollView.zoomScale = 0.15;
+    self.scrollView.zoomScale = 0.75;
 }
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    self.scrollView.zoomScale = 0.15;
+    self.scrollView.zoomScale = 0.75;
 }
 
 -(UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
