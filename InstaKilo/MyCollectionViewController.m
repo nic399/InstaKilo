@@ -7,8 +7,12 @@
 //
 
 #import "MyCollectionViewController.h"
+#import "MyCollectionReusableView.h"
+#import "MyCollectionViewCell.h"
 
 @interface MyCollectionViewController ()
+
+@property (nonatomic, strong) NSMutableArray *imagesNameArr;
 
 @end
 
@@ -26,6 +30,14 @@ static NSString * const reuseIdentifier = @"Cell";
     [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:reuseIdentifier];
     
     // Do any additional setup after loading the view.
+    
+    self.imagesNameArr = [NSMutableArray new];
+    
+    for (int i = 0; i < 42; i++) {
+        [self.imagesNameArr addObject:[NSString stringWithFormat:@"picture%d", i]];
+    }
+    
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -46,25 +58,31 @@ static NSString * const reuseIdentifier = @"Cell";
 #pragma mark <UICollectionViewDataSource>
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-#warning Incomplete implementation, return the number of sections
-    return 0;
+    return 1;
 }
 
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-#warning Incomplete implementation, return the number of items
-    return 0;
+    return [self.imagesNameArr count];
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
+    MyCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"MyCell" forIndexPath:indexPath];
     
     // Configure the cell
+    cell.imageView.image = [UIImage imageNamed:self.imagesNameArr[indexPath.row]];
     
     return cell;
 }
 
 #pragma mark <UICollectionViewDelegate>
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    [self performSegueWithIdentifier:@"showDetail" sender:self];
+}
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    
+}
 
 /*
 // Uncomment this method to specify if the specified item should be highlighted during tracking
