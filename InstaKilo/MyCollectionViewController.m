@@ -11,6 +11,7 @@
 #import "MyCollectionViewCell.h"
 #import "DetailViewController.h"
 #import "MyImageClass.h"
+#import "CustomCollectionReusableView.h"
 
 @interface MyCollectionViewController ()
 
@@ -41,7 +42,8 @@ static NSString * const reuseIdentifier = @"Cell";
     
     // Register cell classes
     [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:reuseIdentifier];
-    
+    //[self.collectionView registerClass:[MyCollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"MyHeader"];
+    [self.collectionView registerNib:[UINib nibWithNibName:@"CustomCollectionReusableView" bundle:nil] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"MyHeader"];
     // Do any additional setup after loading the view.
     
     self.imagesNameArr = [NSMutableArray new];
@@ -62,6 +64,7 @@ static NSString * const reuseIdentifier = @"Cell";
         myImage.name = self.imagesNameArr[i];
         myImage.location = [self assignLocation:i%5];
         [myImage.subjectsArr addObject:[self assignSubject:i%3]];
+        myImage.image = [UIImage imageNamed:self.imagesNameArr[i]];
         [self.myImageObjectsArr addObject:myImage];
     }
     
@@ -92,7 +95,7 @@ static NSString * const reuseIdentifier = @"Cell";
         }
     }
     
-    
+    [self sortImagesBy:Subject];
     
     
 }
@@ -105,7 +108,7 @@ static NSString * const reuseIdentifier = @"Cell";
 -(void)sortImagesBy:(sortParameterEnum)sortParameter {
     NSLog(@"Sorting by %ld", sortParameter);
     
-    [self.dataSourceArr removeAllObjects];
+    self.dataSourceArr = [NSMutableArray new];
     NSLog(@"dataSourceArr emptied");
     switch (sortParameter) {
         case 0: // sort by 'Subject'
@@ -146,6 +149,8 @@ static NSString * const reuseIdentifier = @"Cell";
             NSLog(@"Unknown sorting parameter selected");
             break;
     }
+    NSLog(@"Sorting Complete");
+    [self.collectionView reloadData];
 }
 
 -(NSString *)assignLocation:(int)input {
@@ -200,18 +205,52 @@ static NSString * const reuseIdentifier = @"Cell";
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return [self.imagesNameArr count];
+    return [self.dataSourceArr[section] count];
+    //return [self.imagesNameArr count];
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    MyCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"MyCell" forIndexPath:indexPath];
+    NSLog(@"Section: %d, Row: %d", indexPath.section, indexPath.row);
     
+    MyCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"MyCell" forIndexPath:indexPath];
+
     // Configure the cell
-    cell.imageView.image = [UIImage imageNamed:self.imagesNameArr[indexPath.row]];
-    cell.imageName.text = self.imagesNameArr[indexPath.row];
+//    cell.imageView.image = [UIImage imageNamed:self.imagesNameArr[indexPath.row]];
+//    cell.imageName.text = self.imagesNameArr[indexPath.row];
+    NSArray<MyImageClass *> *sectionArr = self.dataSourceArr[indexPath.section];
+    MyImageClass *cellImageClassObject = sectionArr[indexPath.row];
+
+    cell.imageView.image = cellImageClassObject.image;
+    cell.imageName.text = cellImageClassObject.name;
+    
+    
     
     return cell;
 }
+
+-(UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
+    NSLog(@"Creating supplement view");
+    MyCollectionReusableView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"MyHeader" forIndexPath:indexPath];
+    if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
+        NSLog(@"creating header");
+        
+        if (self.sortViewBy.selectedSegmentIndex == 0) {
+            NSLog(@"set to %@, indexPath.section: %ld current text %@", self.subjectsArr[indexPath.section], (long)indexPath.section, headerView.titleLabel.text);
+            headerView.titleLabel.text = self.subjectsArr[indexPath.section];
+        }
+        else if (self.sortViewBy.selectedSegmentIndex == 1) {
+            NSLog(@"1");
+            headerView.titleLabel.text = self.locationsArr[indexPath.section];
+        }
+        
+        NSLog(@"HeaderView creation complete, title: %@", headerView.titleLabel.text);
+        
+        return headerView;
+    }
+    
+    return [UIView new];
+}
+
 
 #pragma mark <UICollectionViewDelegate>
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -224,6 +263,9 @@ static NSString * const reuseIdentifier = @"Cell";
     DetailViewController *destinationController = segue.destinationViewController;
     destinationController.detailImage = myCell.imageView.image;
 }
+
+
+
 
 /*
  // Uncomment this method to specify if the specified item should be highlighted during tracking

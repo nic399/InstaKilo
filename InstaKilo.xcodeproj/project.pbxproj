@@ -17,6 +17,8 @@
 		013E51491F97E9EA00BC08BD /* MyCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 013E51481F97E9EA00BC08BD /* MyCollectionViewController.m */; };
 		013E514F1F97F67200BC08BD /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 013E514E1F97F67200BC08BD /* DetailViewController.m */; };
 		013E51521F97FD1A00BC08BD /* MyImageClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 013E51511F97FD1A00BC08BD /* MyImageClass.m */; };
+		013E515B1F9835D000BC08BD /* CustomCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 013E51591F9835D000BC08BD /* CustomCollectionReusableView.m */; };
+		013E515C1F9835D000BC08BD /* CustomCollectionReusableView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 013E515A1F9835D000BC08BD /* CustomCollectionReusableView.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +40,9 @@
 		013E514E1F97F67200BC08BD /* DetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailViewController.m; sourceTree = "<group>"; };
 		013E51501F97FD1A00BC08BD /* MyImageClass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyImageClass.h; sourceTree = "<group>"; };
 		013E51511F97FD1A00BC08BD /* MyImageClass.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyImageClass.m; sourceTree = "<group>"; };
+		013E51581F9835D000BC08BD /* CustomCollectionReusableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CustomCollectionReusableView.h; sourceTree = "<group>"; };
+		013E51591F9835D000BC08BD /* CustomCollectionReusableView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CustomCollectionReusableView.m; sourceTree = "<group>"; };
+		013E515A1F9835D000BC08BD /* CustomCollectionReusableView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomCollectionReusableView.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +82,9 @@
 				013E51471F97E9EA00BC08BD /* MyCollectionViewController.h */,
 				013E51481F97E9EA00BC08BD /* MyCollectionViewController.m */,
 				013E51411F97E87C00BC08BD /* MyCollectionViewCell.h */,
+				013E51581F9835D000BC08BD /* CustomCollectionReusableView.h */,
+				013E51591F9835D000BC08BD /* CustomCollectionReusableView.m */,
+				013E515A1F9835D000BC08BD /* CustomCollectionReusableView.xib */,
 				013E51421F97E87C00BC08BD /* MyCollectionViewCell.m */,
 				013E51441F97E8C600BC08BD /* MyCollectionReusableView.h */,
 				013E51451F97E8C600BC08BD /* MyCollectionReusableView.m */,
@@ -149,6 +157,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				013E515C1F9835D000BC08BD /* CustomCollectionReusableView.xib in Resources */,
 				013E51381F97C08F00BC08BD /* LaunchScreen.storyboard in Resources */,
 				013E51351F97C08F00BC08BD /* Assets.xcassets in Resources */,
 				013E51331F97C08F00BC08BD /* Main.storyboard in Resources */,
@@ -168,6 +177,7 @@
 				013E51431F97E87C00BC08BD /* MyCollectionViewCell.m in Sources */,
 				013E51461F97E8C600BC08BD /* MyCollectionReusableView.m in Sources */,
 				013E512D1F97C08F00BC08BD /* AppDelegate.m in Sources */,
+				013E515B1F9835D000BC08BD /* CustomCollectionReusableView.m in Sources */,
 				013E514F1F97F67200BC08BD /* DetailViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

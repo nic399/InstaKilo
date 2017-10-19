@@ -1,5 +1,5 @@
 //
-//  MyCollectionReusableView.h
+//  CustomCollectionReusableView.h
 //  InstaKilo
 //
 //  Created by Nicholas Fung on 2017-10-18.
@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MyCollectionReusableView : UICollectionReusableView
+@interface CustomCollectionReusableView : UICollectionReusableView
 
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 
